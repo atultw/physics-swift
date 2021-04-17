@@ -3,7 +3,7 @@ import SpriteKit
 import SwiftUI
 
 public class Ledge: SKShapeNode {
-    public convenience init(width: CGFloat, angle: Int, position: (Int, Int), color: UIColor, fric: CGFloat) {
+    public convenience init(width: CGFloat, angle: Int, position: (Int, Int), color: UIColor, fric: Float) {
         
         let entitySize = CGSize(width: width, height: 10.0)
         self.init(rectOf: entitySize, cornerRadius: 2)
@@ -20,7 +20,7 @@ public class Ledge: SKShapeNode {
         self.physicsBody = SKPhysicsBody(rectangleOf: entitySize)
         self.physicsBody?.isDynamic = false
         self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.friction = fric
+        self.physicsBody?.friction = CGFloat(fric)
     }
     
 }
@@ -38,7 +38,12 @@ public class Ball: SKNode {
     public var timeCreated: Date
     public var timeReachedBottom: Date?
     
-    init(radius: Int, pos: CGPoint, ballColor: UIColor, fric: CGFloat, gravity: Bool) {
+    init(radius: Int,
+         pos: CGPoint,
+         ballColor: UIColor,
+         fric: CGFloat,
+         gravity: Bool,
+         dynamic: Bool) {
         
         self.timeCreated = Date()
         self.labelNode = SKLabelNode(text: String(""))
@@ -53,6 +58,7 @@ public class Ball: SKNode {
         physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(radius))
         physicsBody?.friction = fric
         physicsBody?.affectedByGravity = gravity
+        physicsBody?.isDynamic = dynamic
         position = pos
         
         addChild(self.circleNode)
@@ -68,23 +74,31 @@ public class Ball: SKNode {
     }
 }
 
-/// Appearance configuration (global)
+/// Appearance and physics configuration
 public struct Configuration {
     
-    public var BackgroundColor: UIColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
-    public var BallColor: UIColor = #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1)
-    public var LedgeColor: UIColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+    public var BackgroundColor: UIColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
+    public var BallColor: UIColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
+    public var LedgeColor: UIColor = #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
     public var Friction: CGFloat = 0.2
     public var DefaultBallRadius: Int = 20
     public var Gravity: Bool = true
+    public var Dynamic: Bool = true
     
-    public init(BackgroundColor: UIColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1), BallColor: UIColor =  #colorLiteral(red: 0.9607843161, green: 0.7058823705, blue: 0.200000003, alpha: 1), LedgeColor: UIColor =  #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1), Friction: CGFloat = 0.2, DefaultBallRadius: Int = 20, Gravity: Bool = true) {
+    public init(BackgroundColor: UIColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1),
+                BallColor: UIColor =  #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1),
+                LedgeColor: UIColor =  #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1),
+                Friction: CGFloat = 0.2,
+                DefaultBallRadius: Int = 20,
+                Gravity: Bool = true,
+                Dynamic: Bool = true) {
         self.BackgroundColor = BackgroundColor
         self.BallColor = BallColor
         self.LedgeColor = LedgeColor
         self.Friction = Friction
         self.DefaultBallRadius = DefaultBallRadius
         self.Gravity = Gravity
+        self.Dynamic = Dynamic
     }
     
     public init() {
@@ -131,11 +145,13 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         launchPtCirc.position = startPt
         self.addChild(launchPtCirc)
         
+        // the first circle
         let defaultCirc = Ball(radius: config.DefaultBallRadius,
                                pos: startPt,
                                ballColor: config.BallColor,
                                fric: config.Friction,
-                               gravity: config.Gravity)
+                               gravity: config.Gravity,
+                               dynamic: config.Dynamic)
         self.addChild(defaultCirc)
     }
     
@@ -207,16 +223,18 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         for touch in touches {
             let theNode = atPoint(touch.location(in: self))
             // if open space is pressed
-            if (theNode == self) {
-                // if it ISN'T on a node, we should create an entry in ballCreationTracker
+            if (theNode == self)
+                || (theNode.name == "launcher") {
+                // if it isn't on a node, we should create an entry in ballCreationTracker
                 ballCreationTracker.updateValue((touch.timestamp, touch.timestamp), forKey: touch)
                 continue
             } else if (theNode.name == "ballChild")
                         || (theNode.name == "launcher") {
                 // we don't want to move the launcher or ball children
-                continue // check next touch
+                continue
             } else if (theNode.name == "ledge")
-                        || (theNode.name == "ballWrapper"){ // TODO remove this maybe?
+            // || (theNode.name == "ballWrapper")
+            {
                 // if this is a ball or a ledge
                 self.draggingNodeTracker[touch] = theNode
                 
@@ -257,12 +275,18 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
                 ballCreationTracker.updateValue((ballCreationTracker[touch]!.0, touch.timestamp), forKey: touch)
                 let radius = ballCreationTracker[touch]!.1-ballCreationTracker[touch]!.0
                 
+                // safety check (we don't want giant circles or negative radii because of a glitch)
+                if (radius < 0.05) || (radius > 0.8) {
+                    continue
+                }
+                
                 let circ = Ball(radius: Int(radius*200),
                                 pos: touch.location(in: self),
                                 ballColor: self.config.BallColor,
                                 fric: self.config.Friction,
-                                // NOTE: We only want to honor gravity choices on the default marble to show the effects of Applied force.
-                                gravity: true)
+                                // NOTE: We only want to honor gravity and isDynamic choices on the default marble to show the effects of Applied force.
+                                gravity: true,
+                                dynamic: true)
                 self.addChild(circ)
             }
             
@@ -272,31 +296,35 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     
 }
 
-// For presentation
 
-/// The view that includes spritekit scene and swiftUI elements
+/// The view that includes SpriteKit scene and SwiftUI elements
 public struct InterfaceView: View {
     
     var gameconfig: Configuration
     var uiconfig: InterfaceConfiguration
-    public var gscene: GameScene!
+    public var gameSkScene: GameScene!
     
     public init(gameconfig: Configuration, uiconfig: InterfaceConfiguration) {
         self.gameconfig = gameconfig
         self.uiconfig = uiconfig
-        self.gscene = GameScene(conf:self.gameconfig, size: CGSize(width: 600, height: 800))
-        self.gscene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.gscene.scaleMode = .fill
+        self.gameSkScene = GameScene(conf:self.gameconfig, size: CGSize(width: 600, height: 800))
+        self.gameSkScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.gameSkScene.scaleMode = .fill
     }
     
-    /// Add something to the canvas
+    /// Add a ledge to the scene
     public func addLedge(width: CGFloat, angle: Int, position: (Int, Int)) {
-        self.gscene.addChild(
+        self.gameSkScene.addChild(
             Ledge(width: width,
                   angle: angle,
                   position: position,
                   color: self.gameconfig.LedgeColor,
-                  fric: self.gameconfig.Friction))
+                  fric: Float(self.gameconfig.Friction)))
+    }
+    
+    // Add any `SKNode` to the scene
+    public func add(_ n: SKNode) {
+        self.gameSkScene.addChild(n)
     }
     
     public var body: some View {
@@ -307,7 +335,7 @@ public struct InterfaceView: View {
             Text(uiconfig.SubText)
                 .font(.subheadline)
             
-            SpriteView(scene: gscene)
+            SpriteView(scene: gameSkScene)
                 .frame(width: 600, height: 800)
                 .edgesIgnoringSafeArea(.all)
         }

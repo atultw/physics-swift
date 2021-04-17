@@ -1,0 +1,56 @@
+<html lang="en">
+    <head>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+            }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgb(255, 230, 148) 0%, rgb(255, 163, 25) 19%, rgb(255, 85, 133) 100%);
+            color: white;
+        }
+        
+        .custom {
+            font-family: -apple-system, 'San Francisco', sans-serif;
+            width: 50%;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 36pt;
+        }
+        
+        
+        code {
+            font-family: 'San Francisco Mono', monospace;
+            font-size: 18pt;
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 10px;
+        }
+        </style>
+        <title>Hi</title>
+    </head>
+    
+    <body>
+        <div class="container">
+            <h1 class="custom">isDynamic Toggles Forces</h1>
+            <br>
+            <h3 class="custom"><b>In SpriteKit,</b> the `isDynamic` property lets us specify whether or not we want a node to be affected by other physics nodes (and the environment). Imagine hitting a golf ball with a club but the ball doesn't move as it rejects applied force. That's the effect of setting isDynamic to false.</h3>
+            <br>
+            <h3 class="custom">We can simulate this effect in SpriteKit as follows</h3>
+            <br>
+            <code>
+                SKPhysicsBody.<b>isDynamic</b> = Bool
+            </code>
+        </div>
+    </body>
+</html>

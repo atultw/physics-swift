@@ -3,69 +3,63 @@ import PlaygroundSupport
 import SwiftUI
 import UIKit
 import SpriteKit
-
-
-
-//  `canvas.add(_: SKNode)` adds a node (like Ledge) to the scene,
-
 //#-end-hidden-code
 
 /*:
  # Learning Physics with SpriteKit
- Welcome! In this playground, we will leverage the awesome physics capabilities of Apple's SpriteKit library to learn basic concepts.
- ## How to Use
- This playground provides several abstractions to quickly create nodes
- `canvas.addLedge(width: Int, angle: Int, position: (Int, Int))` creates a ledge for our marble simulation
  
- You can configure all the `SKShapeNode` properties on `Ledge` as you would a regular node.
+ Welcome! Here's a quick overview:
  
- ## Styles
- You can change the look and feel of our marble simulation at any time using the ``conf`` variable.
+ ## Format
+ This playground is a sort of lab. Use code to configure, evaluate results on the right side, and understand how physics and the `SKPhysicsBody` work. Summaries with key points and real SK code examples are presented after each experiment.
  
+ ## Programming
+ This playground provides several abstractions on top of SK.
+ - `canvas.addLedge(width: Int, angle: Int, position: (Int, Int))` creates a ledge
+ - `canvas.add(_: SKNode)` adds a custom node (more on last page)
+ 
+ ## Configuring
+ The `conf` variable is for styling and configuring physics. Its fields are:
+ - `BackgroundColor`: UIColor
+ - `BallColor`: UIColor
+ - `LedgeColor`: UIColor
+ - `DefaultBallRadius`: Int
+ - `Gravity`: Bool
+ - `Friction`: Float (0 to 1)
+ - `Dynamic`: Bool
+
  ## Interacting
- To make this even more fun, you can drag and drop nodes once the scene is rendered (for example, if you want to tweak the positioning of a ledge)
- Click and hold then release to create a marble. The marble gets bigger the longer you press.
+ Here's what you can do on the right side:
+ - Drag Ledges
+ - Click and hold to create marbles
+ - Track duration of marble runs (under where a marble landed)
+ - Use a consistent start point (white circle)
  */
 
 //: Let's begin with the styling. Choose some colors you like!
-
-//#-editable-code
-// don't change the variable name.
-
 let conf = Configuration (
-
-    BackgroundColor: #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1),
-    BallColor: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1),
-    LedgeColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
-    
+    BackgroundColor: /*#-editable-code*/#colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1) /*#-end-editable-code*/,
+    BallColor: /*#-editable-code*/#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1) /*#-end-editable-code*/,
+    LedgeColor: /*#-editable-code*/#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1) /*#-end-editable-code*/
 )
 
-//#-end-editable-code
-
 //#-hidden-code
-
-// set the scene text details and create canvas for customization
-
 let uiconf = InterfaceConfiguration (
     MainText: "Press and Hold",
     SubText: "Then release to create a marble"
 )
-
 let canvas = InterfaceView(gameconfig: conf, uiconfig: uiconf)
 //#-end-hidden-code
 
 //: Now onto the building part. Add some ledges to your marble run!
-
+// Hint: Duplicate these lines to make more ledges. Remember you can move them on the right!
 //#-editable-code
-
-// Hint: Copy paste these lines and fiddle with the values to get a desired result
 canvas.addLedge(width: 200, angle: 10, position: (150, 200))
 canvas.addLedge(width: 200, angle: -10, position: (-100, 50))
 canvas.addLedge(width: 200, angle: 10, position: (100, -100))
+//#-end-editable-code
 
-// end editing
-
+//#-hidden-code
 let wrapper = UIHostingController(rootView: canvas)
 PlaygroundPage.current.liveView = wrapper
-
-//#-end-editable-code
+//#-end-hidden-code

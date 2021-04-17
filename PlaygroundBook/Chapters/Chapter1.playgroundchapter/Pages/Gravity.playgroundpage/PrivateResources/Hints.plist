@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Hints</key>
+	<array>
+		<dict>
+			<key>Content</key>
+			<string>Try dragging a ledge against the marble.</string>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<string>Try moving the stationary marble by releasing another one on top or next to it.</string>
+		</dict>
+	</array>
+</dict>
+</plist>

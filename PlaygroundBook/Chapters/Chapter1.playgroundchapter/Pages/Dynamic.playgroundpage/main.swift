@@ -3,25 +3,20 @@ import PlaygroundSupport
 import SwiftUI
 import UIKit
 import SpriteKit
-
-
 //#-end-hidden-code
 
 /*:
- # Friction
- ### Friction is the resistance that one surface or object encounters when moving over another.
- 
- In the configuration below, edit the friction value to anything between 0 and 1. Observe how this affects the time it takes for a marble to reach the bottom.
- #### What's the relationship between friction and speed?
+ # Normal and Applied Force
+ ### In physics, normal force is what keeps objects on a surface even as gravity pulls them in. Applied force is force exerted on an object from another object.
+ #### What forces are being exerted on the ball? Can we move it?
  */
 
 let conf = Configuration (
-    Friction: /*#-editable-code*/0.0 /*#-end-editable-code*/, // Hint: Try 0 and 1
-    DefaultBallRadius: /*#-editable-code*/20 /*#-end-editable-code*/
+    // Change this to false the second time.
+    Dynamic: /*#-editable-code*/true /*#-end-editable-code*/
 )
 
 //#-hidden-code
-// set the scene text details and create canvas for customization
 let uiconf = InterfaceConfiguration (
     MainText: "Press and Hold",
     SubText: "Then release to create a marble"

@@ -2,11 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Name</key>
-	<string>Size - Mass and Volume</string>
-	<key>LiveViewEdgeToEdge</key>
-	<true/>
-	<key>LiveViewMode</key>
-	<string>VisibleByDefault</string>
+	<key>Hints</key>
+	<array>
+		<dict>
+			<key>Content</key>
+			<string>Try moving the marble by dragging a ledge like you did earlier. What happens?</string>
+		</dict>
+	</array>
 </dict>
 </plist>

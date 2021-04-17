@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Hints</key>
+	<array>
+		<dict>
+			<key>Content</key>
+			<string>Try out `restitution` on a `SKPhysicsBody`! The value can be between 0 and 1; which one is more bouncy?</string>
+		</dict>
+		<dict>
+			<key>Content</key>
+			<string>You can pre-create a marble by initializing `Ball` and passing it as node to `canvas.add(node)`</string>
+		</dict>
+	</array>
+</dict>
+</plist>
