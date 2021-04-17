@@ -1,0 +1,57 @@
+<html lang="en">
+<head>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0,121,255,1) 0%, rgba(25,145,255,1) 19%, rgba(255,85,245,1) 100%);
+            color: white;
+        }
+
+        .custom {
+            font-family: -apple-system, 'San Francisco', sans-serif;
+            width: 50%;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36pt;
+        }
+
+
+        code {
+            font-family: 'San Francisco Mono', monospace;
+            font-size: 18pt;
+            background: #2a2a2a;
+            border-radius: 10px;
+            padding: 10px;
+        }
+    </style>
+    <title>Hi</title>
+</head>
+
+<body>
+<div class="container">
+    <h1 class="custom">Larger Size = Slower</h1>
+    <br>
+    <h3 class="custom"><b>In this case,</b> increasing the size of a marble means there is more mass to move when rolling. This lowers the speed. <i>(However, it can also mean that sustained speed is higher than a small marble. This isn't relevant here.)</i></h3>
+    <br>
+    <h3 class="custom">We can simulate this in SpriteKit using the .friction property</h3>
+    <br>
+    <code>
+        SKNode.physicsBody?<b>.friction</b> = CGFloat
+    </code>
+
+</div>
+</body>
+</html>

@@ -3,11 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>Name</key>
-	<string>ChapterOneName</string>
+	<string>Main</string>
 	<key>Pages</key>
 	<array>
 		<string>Introduction.playgroundpage</string>
-		<string>Speed.playgroundpage</string>
+		<string>Friction.playgroundpage</string>
+		<string>FrictionResult.cutscenepage</string>
+		<string>Size.playgroundpage</string>
+		<string>SizeResult.cutscenepage</string>
 	</array>
 </dict>
 </plist>

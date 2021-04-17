@@ -2,6 +2,7 @@
 import PlaygroundSupport
 import SwiftUI
 import UIKit
+import SpriteKit
 
 
 
@@ -31,12 +32,12 @@ import UIKit
 //#-editable-code
 // don't change the variable name.
 
-/// The global configuration for the simulator.
 let conf = Configuration (
-    // the first three colors are for the scene background. You'll learn more about scenes in a moment.
+
     BackgroundColor: #colorLiteral(red: 0.4745098054, green: 0.8392156959, blue: 0.9764705896, alpha: 1),
     BallColor: #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1),
     LedgeColor: #colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)
+    
 )
 
 //#-end-editable-code
@@ -58,7 +59,7 @@ let canvas = InterfaceView(gameconfig: conf, uiconfig: uiconf)
 //#-editable-code
 
 // Hint: Copy paste these lines and fiddle with the values to get a desired result
-canvas.addLedge(width: 200, angle: 10, position: (100, 200))
+canvas.addLedge(width: 200, angle: 10, position: (150, 200))
 canvas.addLedge(width: 200, angle: -10, position: (-100, 50))
 canvas.addLedge(width: 200, angle: 10, position: (100, -100))
 
