@@ -7,7 +7,7 @@ import SpriteKit
 
 /*:
  # Normal and Applied Force
- ### In physics, normal force is what keeps objects on a surface even as gravity pulls them in. Applied force is force exerted on an object from another object.
+ ### In physics, normal force keeps objects stationary when resting even as gravity pulls them in. Applied force is exerted on an object by another object.
  #### What forces are being exerted on the ball? Can we move it?
  */
 
@@ -24,7 +24,7 @@ let uiconf = InterfaceConfiguration (
 let canvas = InterfaceView(gameconfig: conf, uiconfig: uiconf)
 //#-end-hidden-code
 
-//: For this section, you can copy paste your code from the previous page.
+//: You can copy paste your code from the previous page.
 //#-editable-code
 canvas.addLedge(width: 200, angle: 10, position: (150, 200))
 canvas.addLedge(width: 200, angle: -10, position: (-100, 50))
@@ -36,3 +36,4 @@ let wrapper = UIHostingController(rootView: canvas)
 PlaygroundPage.current.liveView = wrapper
 //#-end-hidden-code
 
+//: After running, use the arrows above to continue

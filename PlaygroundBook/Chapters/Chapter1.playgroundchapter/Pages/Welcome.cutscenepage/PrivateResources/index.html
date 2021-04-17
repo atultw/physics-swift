@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+    <!--    for emojis-->
+    <meta charset="UTF-8">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: black;
+            color: white;
+        }
+
+        .custom {
+            font-family: -apple-system, 'San Francisco', sans-serif;
+            width: 50%;
+            text-align: center;
+            text-shadow: 1px 1px 9px rgba(164, 164, 164, 0.7);
+        }
+
+        .flip {
+
+            animation: 3s ease infinite TextAnimation;
+            -webkit-animation: 3s ease infinite TextAnimation;
+        }
+
+        @keyframes TextAnimation {
+            0% {
+                transform: scale(1) rotate(0);
+            }
+            20% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(10deg);
+            }
+            30% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(-10deg)
+            }
+            40% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(0)
+            }
+            60% {
+                transform: scale3d(0.9, 0.9, 0.9) rotate(0)
+            }
+            70% {
+                transform: scale3d(1, 1, 1) rotate(0)
+            }
+            /*    Intentional 30% delay to let user read without moving*/
+
+        }
+
+        @-webkit-keyframes TextAnimation {
+            0% {
+                transform: scale(1) rotate(0);
+            }
+            20% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(10deg);
+            }
+            30% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(-10deg)
+            }
+            40% {
+                transform: scale3d(1.3, 1.3, 1.3) rotate(0)
+            }
+            60% {
+                transform: scale3d(0.9, 0.9, 0.9) rotate(0)
+            }
+            70% {
+                transform: scale3d(1, 1, 1) rotate(0)
+            }
+            /*    Intentional 30% delay to let user read without moving*/
+
+        }
+
+        h1 {
+            font-size: 52pt;
+        }
+
+    </style>
+    <title>Welcome</title>
+</head>
+
+<body>
+<div class="container">
+    <h1 class="custom flip">Hello 👋</h1>
+
+</div>
+<script>
+    setTimeout(
+        function () {
+            let moveOnLabel = document.createElement('div')
+            moveOnLabel.classList.add("custom")
+            moveOnLabel.innerHTML = "Press the forward arrow above"
+            document.querySelector(".container").appendChild(moveOnLabel)
+        }, 2000);
+</script>
+</body>
+</html>

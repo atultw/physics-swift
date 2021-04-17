@@ -6,15 +6,15 @@
 	<string>Main</string>
 	<key>Pages</key>
 	<array>
+		<string>Welcome.cutscenepage</string>
 		<string>Introduction.playgroundpage</string>
 		<string>Friction.playgroundpage</string>
 		<string>FrictionResult.cutscenepage</string>
 		<string>Size.playgroundpage</string>
 		<string>SizeResult.cutscenepage</string>
-		<string>Dynamic.playgroundpage</string>
-		<string>DynamicResult.cutscenepage</string>
 		<string>Gravity.playgroundpage</string>
 		<string>GravityResult.cutscenepage</string>
+		<string>DynamicResult.cutscenepage</string>
 		<string>Final.playgroundpage</string>
 		<string>FinalResult.cutscenepage</string>
 	</array>

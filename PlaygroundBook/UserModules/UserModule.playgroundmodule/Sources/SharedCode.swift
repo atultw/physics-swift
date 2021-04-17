@@ -1,77 +1,20 @@
-
+// By Atulya Weise
+// This file includes the backend of the game with API and some structs, classes.
 import SpriteKit
 import SwiftUI
 
-public class Ledge: SKShapeNode {
-    public convenience init(width: CGFloat, angle: Int, position: (Int, Int), color: UIColor, fric: Float) {
-        
-        let entitySize = CGSize(width: width, height: 10.0)
-        self.init(rectOf: entitySize, cornerRadius: 2)
-        
-        // Styles
-        self.fillColor = color
-        
-        // Swift has handy angle tools!
-        self.zRotation = CGFloat(Angle(degrees: Double(angle)).radians)
-        self.position = CGPoint(x: position.0, y: position.1)
-        self.name = "ledge"
-        
-        // handle physics
-        self.physicsBody = SKPhysicsBody(rectangleOf: entitySize)
-        self.physicsBody?.isDynamic = false
-        self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.friction = CGFloat(fric)
-    }
-    
-}
+
+let FlashInOut: SKAction = SKAction.sequence([.fadeIn(withDuration: 2.0),
+                                              .fadeOut(withDuration: 2.0)])
+
+let BounceIn: SKAction = SKAction.sequence([.scale(by: 1.1, duration: 0.5),
+                                            .scale(by: 0.5, duration: 1.0)])
+
 
 /// Masks used for collision detection
 struct Masks {
     static let Floor: UInt32 = 0
     static let Ball: UInt32 = 1
-}
-
-/// Wrapper for `SKShapeNode` circle and `SKLabelNode` text to represent a marble.
-public class Ball: SKNode {
-    public var labelNode: SKLabelNode
-    public var circleNode: SKShapeNode
-    public var timeCreated: Date
-    public var timeReachedBottom: Date?
-    
-    init(radius: Int,
-         pos: CGPoint,
-         ballColor: UIColor,
-         fric: CGFloat,
-         gravity: Bool,
-         dynamic: Bool) {
-        
-        self.timeCreated = Date()
-        self.labelNode = SKLabelNode(text: String(""))
-        self.circleNode = SKShapeNode(circleOfRadius: CGFloat(radius))
-        self.circleNode.name = "ballChild"
-        
-        self.circleNode.fillColor = ballColor
-        self.labelNode.fontSize = 18
-        self.labelNode.name = "ballChild"
-        self.labelNode.fontName = "San Francisco Bold"
-        super.init()
-        physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(radius))
-        physicsBody?.friction = fric
-        physicsBody?.affectedByGravity = gravity
-        physicsBody?.isDynamic = dynamic
-        position = pos
-        
-        addChild(self.circleNode)
-        // label that will display time taken to fall
-        addChild(self.labelNode)
-        
-        self.physicsBody?.categoryBitMask = Masks.Ball
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }
 
 /// Appearance and physics configuration
@@ -119,11 +62,118 @@ public struct InterfaceConfiguration {
     }
 }
 
-let FlashInOut: SKAction = SKAction.sequence([.fadeIn(withDuration: 2.0),
-                                              .fadeOut(withDuration: 2.0)])
+public class Ledge: SKShapeNode {
+    public convenience init(width: CGFloat, angle: Int, position: (Int, Int), color: UIColor, fric: Float) {
+        
+        let entitySize = CGSize(width: width, height: 20)
+        self.init(rectOf: entitySize, cornerRadius: 2)
+        
+        // Styles
+        self.fillColor = color
+        
+        // Swift has handy angle tools!
+        self.zRotation = CGFloat(Angle(degrees: Double(angle)).radians)
+        self.position = CGPoint(x: position.0, y: position.1)
+        self.name = "ledge"
+        
+        // handle physics
+        self.physicsBody = SKPhysicsBody(rectangleOf: entitySize)
+        self.physicsBody?.isDynamic = false
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.friction = CGFloat(fric)
+    }
+    
+}
 
-let BounceIn: SKAction = SKAction.sequence([.scale(by: 1.1, duration: 0.5),
-                                            .scale(by: 0.5, duration: 1.0)])
+/// Wrapper for `SKShapeNode` circle and `SKLabelNode` text to represent a marble.
+public class Ball: SKNode {
+    public var labelNode: SKLabelNode
+    public var circleNode: SKShapeNode
+    public var timeCreated: Date
+    public var timeReachedBottom: Date?
+    
+    init(radius: Int,
+         pos: CGPoint,
+         ballColor: UIColor,
+         fric: CGFloat,
+         gravity: Bool,
+         dynamic: Bool) {
+        
+        self.timeCreated = Date()
+        self.labelNode = SKLabelNode(text: String(""))
+        self.circleNode = SKShapeNode(circleOfRadius: CGFloat(radius))
+        self.circleNode.name = "ballChild"
+        
+        self.circleNode.fillColor = ballColor
+        self.labelNode.fontSize = 18
+        self.labelNode.name = "ballChild"
+        self.labelNode.fontName = "San Francisco Bold"
+        super.init()
+        physicsBody = SKPhysicsBody(circleOfRadius: CGFloat(radius))
+        physicsBody?.friction = fric
+        physicsBody?.affectedByGravity = gravity
+        physicsBody?.isDynamic = dynamic
+        position = pos
+        
+        addChild(self.circleNode)
+        // label that will display time taken to fall
+        addChild(self.labelNode)
+        
+        self.physicsBody?.categoryBitMask = Masks.Ball
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+/// The view that includes SpriteKit scene and SwiftUI elements
+public struct InterfaceView: View {
+    
+    var gameconfig: Configuration
+    var uiconfig: InterfaceConfiguration
+    public var gameSkScene: GameScene!
+    
+    public init(gameconfig: Configuration, uiconfig: InterfaceConfiguration) {
+        self.gameconfig = gameconfig
+        self.uiconfig = uiconfig
+        self.gameSkScene = GameScene(conf:self.gameconfig, size: CGSize(width: 600, height: 800))
+        self.gameSkScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        self.gameSkScene.scaleMode = .fill
+    }
+    
+    /// Add a ledge to the scene
+    public func addLedge(width: CGFloat, angle: Int, position: (Int, Int)) {
+        self.gameSkScene.addChild(
+            Ledge(width: width,
+                  angle: angle,
+                  position: position,
+                  color: self.gameconfig.LedgeColor,
+                  fric: Float(self.gameconfig.Friction)))
+    }
+    
+    // Add any `SKNode` to the scene
+    public func add(_ n: SKNode) {
+        self.gameSkScene.addChild(n)
+    }
+    
+    public var body: some View {
+        VStack {
+            Text(uiconfig.MainText)
+                .font(.title)
+            
+            Text(uiconfig.SubText)
+                .font(.subheadline)
+            
+            SpriteView(scene: gameSkScene)
+                .frame(width: 600, height: 800)
+                .edgesIgnoringSafeArea(.all)
+        }
+        
+    }
+    
+}
 
 /// scene with the items on screen
 public class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -131,6 +181,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     var config: Configuration = Configuration.init()
     var draggingNodeTracker: [UITouch:SKNode] = [:] // Used to handle dragging and dropping
     var timeLabel: SKLabelNode?
+    
     var ballCreationTracker = [UITouch : (TimeInterval, TimeInterval)]()
     // key: Consistent across touchesBegan and touchesEnded
     // value: (touch down , touch up)  <== subtract to get duration of touch
@@ -217,6 +268,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    /// Start tracking touches for draggability and marble creation
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         // reset the dragging list
         self.draggingNodeTracker = [:]
@@ -244,8 +296,8 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    /// Dragging
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        // draggability
         for touch in touches {
             if (draggingNodeTracker[touch] != nil) {
                 // if this was in the dragged nodes list
@@ -258,6 +310,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    /// Marble Creation
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch in touches {
@@ -269,7 +322,7 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
                 // complete the dragging and remove from list
                 draggingNodeTracker[touch] = nil
                 
-                // notice how we don't move any nodes. That should not be done in this event.
+                // notice how we don't move any nodes. That was already done in `touchesMoved`
             } else if (ballCreationTracker[touch] != nil) {
                 // if we are dealing with ball creation
                 ballCreationTracker.updateValue((ballCreationTracker[touch]!.0, touch.timestamp), forKey: touch)
@@ -296,51 +349,4 @@ public class GameScene: SKScene, SKPhysicsContactDelegate {
     
 }
 
-
-/// The view that includes SpriteKit scene and SwiftUI elements
-public struct InterfaceView: View {
-    
-    var gameconfig: Configuration
-    var uiconfig: InterfaceConfiguration
-    public var gameSkScene: GameScene!
-    
-    public init(gameconfig: Configuration, uiconfig: InterfaceConfiguration) {
-        self.gameconfig = gameconfig
-        self.uiconfig = uiconfig
-        self.gameSkScene = GameScene(conf:self.gameconfig, size: CGSize(width: 600, height: 800))
-        self.gameSkScene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        self.gameSkScene.scaleMode = .fill
-    }
-    
-    /// Add a ledge to the scene
-    public func addLedge(width: CGFloat, angle: Int, position: (Int, Int)) {
-        self.gameSkScene.addChild(
-            Ledge(width: width,
-                  angle: angle,
-                  position: position,
-                  color: self.gameconfig.LedgeColor,
-                  fric: Float(self.gameconfig.Friction)))
-    }
-    
-    // Add any `SKNode` to the scene
-    public func add(_ n: SKNode) {
-        self.gameSkScene.addChild(n)
-    }
-    
-    public var body: some View {
-        VStack {
-            Text(uiconfig.MainText)
-                .font(.title)
-            
-            Text(uiconfig.SubText)
-                .font(.subheadline)
-            
-            SpriteView(scene: gameSkScene)
-                .frame(width: 600, height: 800)
-                .edgesIgnoringSafeArea(.all)
-        }
-        
-    }
-    
-}
 

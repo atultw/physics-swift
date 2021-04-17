@@ -13,7 +13,7 @@ import SpriteKit
 
 /*:
  # Gravity
- ### In physics, gravity is the force that keeps the universe together. Let's see how we can use it in spritekit
+ ### In physics, gravity is the force that keeps the universe together. Let's see how we can use it in `SpriteKit`
  #### Try to move the marble. What's the difference?
  */
 
@@ -41,3 +41,5 @@ canvas.addLedge(width: 200, angle: 10, position: (100, -100))
 let wrapper = UIHostingController(rootView: canvas)
 PlaygroundPage.current.liveView = wrapper
 //#-end-hidden-code
+
+//: After running, use the arrows above to continue

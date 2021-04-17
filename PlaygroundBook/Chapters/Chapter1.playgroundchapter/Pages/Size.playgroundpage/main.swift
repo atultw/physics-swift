@@ -31,6 +31,8 @@ canvas.addLedge(width: 200, angle: -10, position: (-100, 50))
 canvas.addLedge(width: 200, angle: 10, position: (100, -100))
 //#-end-editable-code
 
+//: After running, use the arrows above to continue
+
 //#-hidden-code
 let wrapper = UIHostingController(rootView: canvas)
 PlaygroundPage.current.liveView = wrapper
